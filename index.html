@@ -21,19 +21,41 @@
 </script>
 <script src="https://unpkg.com/lucide@latest"></script>
 <style>
+  :root { --gold: #C9A876; }
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; background-color: #000; }
+
+  .grain {
+    position: fixed; inset: 0; z-index: 45; pointer-events: none;
+    opacity: 0.05; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
 
   .nav-shell { transition: background-color 0.4s ease, box-shadow 0.4s ease; }
   .nav-shell.scrolled { background-color: rgba(0,0,0,0.75); backdrop-filter: blur(12px); box-shadow: 0 1px 0 rgba(255,255,255,0.08); }
 
+  .nav-link { position: relative; }
+  .nav-link::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -4px; height: 1px;
+    background: var(--gold); transform: scaleX(0); transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+  .nav-link:hover::after { transform: scaleX(1); }
+
   .divider { border-top: 1px solid rgba(255,255,255,0.08); }
+  .eyebrow { color: var(--gold); letter-spacing: 0.15em; }
 
-  .skill-pill { transition: border-color 0.2s ease, background-color 0.2s ease; }
-  .skill-pill:hover { border-color: rgba(255,255,255,0.3); background-color: rgba(255,255,255,0.06); }
+  .skill-row { transition: border-color 0.2s ease, padding-left 0.2s ease; border-color: rgba(255,255,255,0.08); }
+  .skill-row:hover { border-color: rgba(201,168,118,0.5); padding-left: 8px; }
 
-  .project-card { transition: border-color 0.3s ease, background-color 0.3s ease, transform 0.3s ease; }
-  .project-card:hover { border-color: rgba(255,255,255,0.25); background-color: rgba(255,255,255,0.04); transform: translateY(-4px); }
+  .work-row { transition: background-color 0.3s ease, padding-left 0.3s ease; }
+  .work-row:hover { background-color: rgba(255,255,255,0.02); padding-left: 12px; padding-right: 12px; }
+  .work-row:hover .work-num { color: var(--gold); }
+  .work-row:hover .work-arrow { opacity: 1; transform: translateX(0); }
+  .work-arrow { opacity: 0; transform: translateX(-6px); transition: all 0.3s ease; }
+
+  .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.9s cubic-bezier(0.16,1,0.3,1), transform 0.9s cubic-bezier(0.16,1,0.3,1); }
+  .reveal.is-visible { opacity: 1; transform: translateY(0); }
 
   @keyframes fadeSlideUp {
     from { opacity: 0; transform: translateY(24px); }
@@ -43,6 +65,9 @@
   .fade-up-2 { animation: fadeSlideUp 0.8s ease 0.4s both; }
   .fade-up-3 { animation: fadeSlideUp 0.8s ease 0.7s both; }
   .fade-up-4 { animation: fadeSlideUp 0.8s ease 0.9s both; }
+
+  @keyframes bounce-soft { 0%,100% { transform: translateY(0); opacity: 0.5; } 50% { transform: translateY(6px); opacity: 1; } }
+  .scroll-cue { animation: bounce-soft 2s ease-in-out infinite; }
 
   .mobile-menu-panel {
     transition: height 0.5s cubic-bezier(0.16,1,0.3,1), opacity 0.5s cubic-bezier(0.16,1,0.3,1);
